@@ -1,8 +1,22 @@
+diff --git a/soh/src/code/z_bgcheck.c b/soh/src/code/z_bgcheck.c
+index 9ce139e..7aef3c2 100644
+--- a/soh/src/code/z_bgcheck.c
++++ b/soh/src/code/z_bgcheck.c
+@@ -4097,7 +4097,8 @@ u32 SurfaceType_GetEcho(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId)
+  * SurfaceType Is Hookshot Surface
+  */
+ u32 SurfaceType_IsHookshotSurface(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+-    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 17 & 1;
++    // return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 17 & 1;
++    return true;
+ }
+ 
+ /**
 diff --git a/soh/src/code/z_player_lib.c b/soh/src/code/z_player_lib.c
-index 87a7009..e76d005 100644
+index 7f3507a..f7ec7f0 100644
 --- a/soh/src/code/z_player_lib.c
 +++ b/soh/src/code/z_player_lib.c
-@@ -1415,7 +1415,7 @@ void func_80090D20(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s*
+@@ -1434,7 +1434,7 @@ void func_80090D20(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s*
                      if (func_8002DD78(this) != 0) {
                          Matrix_Translate(500.0f, 300.0f, 0.0f, MTXMODE_APPLY);
                          Player_DrawHookshotReticle(
@@ -12,7 +26,7 @@ index 87a7009..e76d005 100644
                  }
              }
 diff --git a/soh/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.c b/soh/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.c
-index bda9b51..3fba9df 100644
+index bda9b51..4a6a919 100644
 --- a/soh/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.c
 +++ b/soh/src/overlays/actors/ovl_Arms_Hook/z_arms_hook.c
 @@ -85,10 +85,10 @@ void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
@@ -57,12 +71,3 @@ index bda9b51..3fba9df 100644
              phi_f16 = bodyDistDiff - velocity;
              if (bodyDistDiff <= velocity) {
                  phi_f16 = 0.0f;
-@@ -266,7 +266,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
-             this->actor.world.pos.x += 10.0f * sp5C;
-             this->actor.world.pos.z += 10.0f * sp58;
-             this->timer = 0;
--            if (SurfaceType_IsHookshotSurface(&globalCtx->colCtx, poly, bgId)) {
-+            if (SurfaceType_IsHookshotSurface(&globalCtx->colCtx, poly, bgId) || true) {
-                 if (bgId != BGCHECK_SCENE) {
-                     dynaPolyActor = DynaPoly_GetActor(&globalCtx->colCtx, bgId);
-                     if (dynaPolyActor != NULL) {
