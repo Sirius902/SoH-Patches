@@ -1,6 +1,6 @@
 diff --git a/soh/src/code/reticle.i8.inc.h b/soh/src/code/reticle.i8.inc.h
 new file mode 100644
-index 0000000..d69790f
+index 00000000..d69790f1
 --- /dev/null
 +++ b/soh/src/code/reticle.i8.inc.h
 @@ -0,0 +1,128 @@
@@ -133,10 +133,10 @@ index 0000000..d69790f
 +    0x0000000000000000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,  // 0x000FC0
 +    0x0000000000000000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,  // 0x000FE0
 diff --git a/soh/src/code/z_player_lib.c b/soh/src/code/z_player_lib.c
-index 7f3507a..562cfdc 100644
+index da7dff3e..e78c4968 100644
 --- a/soh/src/code/z_player_lib.c
 +++ b/soh/src/code/z_player_lib.c
-@@ -1194,6 +1194,45 @@ void func_80090A28(Player* this, Vec3f* vecs) {
+@@ -1266,6 +1266,45 @@ void func_80090A28(Player* this, Vec3f* vecs) {
      Matrix_MultVec3f(&D_80126098, &vecs[2]);
  }
  
@@ -163,33 +163,33 @@ index 7f3507a..562cfdc 100644
 +    gsSPEndDisplayList(),
 +};
 +
-+Gfx* HookableReticle_Draw(GlobalContext* globalCtx, Gfx* gfx) {
++Gfx* HookableReticle_Draw(PlayState* play, Gfx* gfx) {
 +    size_t i;
-+    u32 frame = globalCtx->gameplayFrames % 20;
++    u32 frame = play->gameplayFrames % 20;
 +    f32 frameAngle;
 +
 +    frameAngle = DEG_TO_RAD(10) / 5 * (ABS((s32)((frame + 15) % 20) - 10) - 5);
 +
-+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
++    Matrix_ReplaceRotation(&play->billboardMtxF);
 +    Matrix_RotateZ(frameAngle, MTXMODE_APPLY);
-+    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx, __FILE__, __LINE__),
++    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx, __FILE__, __LINE__),
 +              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 +    gSPDisplayList(gfx++, hookableReticleDL);
 +
 +    return gfx;
 +}
 +
- void Player_DrawHookshotReticle(GlobalContext* globalCtx, Player* this, f32 arg2) {
+ void Player_DrawHookshotReticle(PlayState* play, Player* this, f32 arg2) {
      static Vec3f D_801260C8 = { -500.0f, -100.0f, 0.0f };
      CollisionPoly* sp9C;
-@@ -1229,6 +1268,10 @@ void Player_DrawHookshotReticle(GlobalContext* globalCtx, Player* this, f32 arg2
-         gSPSegment(WORLD_OVERLAY_DISP++, 0x06, globalCtx->objectCtx.status[this->actor.objBankIndex].segment);
+@@ -1299,6 +1338,10 @@ void Player_DrawHookshotReticle(PlayState* play, Player* this, f32 arg2) {
+         gSPSegment(WORLD_OVERLAY_DISP++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
          gSPDisplayList(WORLD_OVERLAY_DISP++, gLinkAdultHookshotReticleDL);
  
-+        if (SurfaceType_IsHookshotSurface(&globalCtx->colCtx, sp9C, bgId)) {
-+            WORLD_OVERLAY_DISP = HookableReticle_Draw(globalCtx, WORLD_OVERLAY_DISP);
++        if (SurfaceType_IsHookshotSurface(&play->colCtx, sp9C, bgId)) {
++            WORLD_OVERLAY_DISP = HookableReticle_Draw(play, WORLD_OVERLAY_DISP);
 +        }
 +
-         CLOSE_DISPS(globalCtx->state.gfxCtx, "../z_player_lib.c", 2592);
+         CLOSE_DISPS(play->state.gfxCtx);
      }
  }
